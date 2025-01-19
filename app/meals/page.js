@@ -1,7 +1,23 @@
 import { Suspense } from "react";
 import MealsGrid from "@/components/meals/meals.grid";
-import { getMeals } from "@/lib/meals";
+import { getMeals, getMeal } from "@/lib/meals";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+
+// if you want dynamic metadata you can do the following
+// this is a special named function next looks for
+export async function generateMetadata({params}) {
+  const meal = getMeal(params.mealSlug)
+
+  if (!meal) {
+    notFound();
+  }
+
+  return {
+    title: meal.title,
+    description: meal.summary
+  }
+}
 
 // Server components can be async with promises
 async function Meals() {
